@@ -1,4 +1,4 @@
-# R-code used for On Latent Trait Model with Bayesian Marginal Likelihood of Rank-Based Estimation
+# R-code used for "On Latent Trait Model with Bayesian Marginal Likelihood of Rank-Based Estimation"
 library("LaplacesDemon")
 set.seed(12345)
 n=100#sample size
