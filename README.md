@@ -109,9 +109,6 @@ X=array(cbind(X_1[1:n_obs,],X_2[1:n_obs,],
 X_init=array(cbind(X_1,X_2,
                    X_3,X_4,
                    X_5,X_6,X_7,X_8,X_9,X_10,X_11),c((n_obs+1),ncol(X_1),m))
-
-
-
 #prior hyperparameters
 lamda2_prior=0.2
 #prior degrees of belief to update sigma square of upsilon (random effects) 
@@ -133,7 +130,6 @@ mean_upsilon_posterior=var_upsilon_posterior=NULL#post values of mean and
 #variance of random effects
 n_iter=50000
 library("msm")
-
 BETA_POST_5=upsilon_POST_5=sigmasq_upsilon_POST_5=NULL
 upsilon_posterior=rep(0.1,m)
 sigmasq_upsilon_post=NULL#posterior value of sigmasq of upsilon
@@ -151,11 +147,8 @@ for(i in 1:n_iter){
     
     
   } 
-  
-  
   #given variance I can sample from gamma (random effects)
   mean_upsilon_posterior=array(NA,c(n_obs,1,m))
-  
   for(t in 1:n_obs){
     for(j in 1:m){
       mean_upsilon_posterior[t,,j]=(z[t,j]-X[t,,j]%*%BETA)
@@ -166,7 +159,6 @@ for(i in 1:n_iter){
   }
   #summing over time:
   mean_upsilon_posterior_sum=apply(mean_upsilon_posterior,3,sum)
-  
   for(j in 1:m){
     mean_upsilon_posterior_sum[j]=mean_upsilon_posterior_sum[j]/(n_obs+1/sigmasq_upsilon_post[j])
     upsilon_posterior[j]=rnorm(1,mean_upsilon_posterior_sum[j],
@@ -240,88 +232,12 @@ upsilon8=cbind(upsilon_POST_1[1:50000,8],upsilon_POST_2[1:50000,8],upsilon_POST_
 upsilon9=cbind(upsilon_POST_1[1:50000,9],upsilon_POST_2[1:50000,9],upsilon_POST_3[1:50000,9],upsilon_POST_4[1:50000,9],upsilon_POST_5[1:50000,9])
 upsilon10=cbind(upsilon_POST_1[1:50000,10],upsilon_POST_2[1:50000,10],upsilon_POST_3[1:50000,10],upsilon_POST_4[1:50000,10],upsilon_POST_5[1:50000,10])
 upsilon11=cbind(upsilon_POST_1[1:50000,11],upsilon_POST_2[1:50000,11],upsilon_POST_3[1:50000,11],upsilon_POST_4[1:50000,11],upsilon_POST_5[1:50000,11])
-chains_upsilons=array(cbind(upsilon1[1:50000,],upsilon2[1:50000,],upsilon3[1:50000,],upsilon4[1:50000,]
-                           ,upsilon5[1:50000,],upsilon6[1:50000,],upsilon7[1:50000,],upsilon8[1:50000,],upsilon9[1:50000,],upsilon10[1:50000,],upsilon11[1:50000,]),c(50000,5,11))
+chains_upsilons=array(cbind(upsilon1[1:50000,],upsilon2[1:50000,],upsilon3[1:50000,],upsilon4[1:50000,]                    ,upsilon5[1:50000,],upsilon6[1:50000,],upsilon7[1:50000,],upsilon8[1:50000,],upsilon9[1:50000,],upsilon10[1:50000,],upsilon11[1:50000,]),c(50000,5,11))
 new_colnames <- c("chain1", "chain2","chain3","chain4","chain5")
 dimnames(chains_upsilons)[[2]]=new_colnames
 dimnames(chains_upsilons)[[3]] <- c("\u03C51", "\u03C52", "\u03C53","\u03C54","\u03C55","\u03C56","\u03C57","\u03C58","\u03C59","\u03C510","\u03C511")
 mcmc_trace(chains_upsilons, pars = c("\u03C51", "\u03C52", "\u03C53","\u03C54","\u03C55","\u03C56","\u03C57","\u03C58","\u03C59","\u03C510","\u03C511"), facet_args = list(ncol = 2, strip.position = "left"))
-sigma1=cbind(sigmasq_upsilon_POST_1[1:50000,1],sigmasq_upsilon_POST_2[1:50000,1],sigmasq_upsilon_POST_3[1:50000,1],sigmasq_upsilon_POST_4[1:50000,1],sigmasq_upsilon_POST_5[1:50000,1])
-sigma2=cbind(sigmasq_upsilon_POST_1[1:50000,2],sigmasq_upsilon_POST_2[1:50000,2],sigmasq_upsilon_POST_3[1:50000,2],sigmasq_upsilon_POST_4[1:50000,2],sigmasq_upsilon_POST_5[1:50000,2])
-sigma3=cbind(sigmasq_upsilon_POST_1[1:50000,3],sigmasq_upsilon_POST_2[1:50000,3],sigmasq_upsilon_POST_3[1:50000,3],sigmasq_upsilon_POST_4[1:50000,3],sigmasq_upsilon_POST_5[1:50000,3])
-sigma4=cbind(sigmasq_upsilon_POST_1[1:50000,4],sigmasq_upsilon_POST_2[1:50000,4],sigmasq_upsilon_POST_3[1:50000,4],sigmasq_upsilon_POST_4[1:50000,4],sigmasq_upsilon_POST_5[1:50000,4])
-sigma5=cbind(sigmasq_upsilon_POST_1[1:50000,5],sigmasq_upsilon_POST_2[1:50000,5],sigmasq_upsilon_POST_3[1:50000,5],sigmasq_upsilon_POST_4[1:50000,5],sigmasq_upsilon_POST_5[1:50000,5])
-sigma6=cbind(sigmasq_upsilon_POST_1[1:50000,6],sigmasq_upsilon_POST_2[1:50000,6],sigmasq_upsilon_POST_3[1:50000,6],sigmasq_upsilon_POST_4[1:50000,6],sigmasq_upsilon_POST_5[1:50000,6])
-sigma7=cbind(sigmasq_upsilon_POST_1[1:50000,7],sigmasq_upsilon_POST_2[1:50000,7],sigmasq_upsilon_POST_3[1:50000,7],sigmasq_upsilon_POST_4[1:50000,7],sigmasq_upsilon_POST_5[1:50000,7])
-sigma8=cbind(sigmasq_upsilon_POST_1[1:50000,8],sigmasq_upsilon_POST_2[1:50000,8],sigmasq_upsilon_POST_3[1:50000,8],sigmasq_upsilon_POST_4[1:50000,8],sigmasq_upsilon_POST_5[1:50000,8])
-sigma9=cbind(sigmasq_upsilon_POST_1[1:50000,9],sigmasq_upsilon_POST_2[1:50000,9],sigmasq_upsilon_POST_3[1:50000,9],sigmasq_upsilon_POST_4[1:50000,9],sigmasq_upsilon_POST_5[1:50000,9])
-sigma10=cbind(sigmasq_upsilon_POST_1[1:50000,10],sigmasq_upsilon_POST_2[1:50000,10],sigmasq_upsilon_POST_3[1:50000,10],sigmasq_upsilon_POST_4[1:50000,10],sigmasq_upsilon_POST_5[1:50000,10])
-sigma11=cbind(sigmasq_upsilon_POST_1[1:50000,11],sigmasq_upsilon_POST_2[1:50000,11],sigmasq_upsilon_POST_3[1:50000,11],sigmasq_upsilon_POST_4[1:50000,11],sigmasq_upsilon_POST_5[1:50000,11])
-chains_sigmas=array(cbind(sigma1[1:50000,],sigma2[1:50000,],sigma3[1:50000,],sigma4[1:50000,]
-                         ,sigma5[1:50000,],sigma6[1:50000,],sigma7[1:50000,],sigma8[1:50000,],sigma9[1:50000,],sigma10[1:50000,],sigma11[1:50000,]),c(50000,5,11))
-subscript_1 <- "\u2081"
-subscript_2 <- "\u2082"
-subscript_3 <- "\u2083"
-subscript_4 <- "\u2084"
-subscript_5 <- "\u2085"
-subscript_6 <- "\u2086"
-subscript_7 <- "\u2087"
-subscript_8 <- "\u2088"
-subscript_9 <- "\u2089"
-subscript_10 <- paste("\u2081", "\u2080", sep = "")
-subscript_11 <- paste("\u2081", "\u2081", sep = "")
-sigma_1_squared <- paste("\u03C3", subscript_1, "²", sep = "")
-sigma_2_squared <- paste("\u03C3", subscript_2, "²", sep = "")
-sigma_3_squared <- paste("\u03C3", subscript_3, "²", sep = "")
-sigma_4_squared <- paste("\u03C3", subscript_4, "²", sep = "")
-sigma_5_squared <- paste("\u03C3", subscript_5, "²", sep = "")
-sigma_6_squared <- paste("\u03C3", subscript_6, "²", sep = "")
-sigma_7_squared <- paste("\u03C3", subscript_7, "²", sep = "")
-sigma_8_squared <- paste("\u03C3", subscript_8, "²", sep = "")
-sigma_9_squared <- paste("\u03C3", subscript_9, "²", sep = "")
-sigma_10_squared <- paste("\u03C3", subscript_10, "\u00B2", sep = "")
-sigma_11_squared <- paste("\u03C3", subscript_11, "\u00B2", sep = "")
-new_colnames <- c("chain1", "chain2","chain3","chain4","chain5")
-dimnames(chains_sigmas)[[2]]=new_colnames
-dimnames(chains_sigmas)[[3]] <- c(sigma_1_squared, sigma_2_squared,sigma_3_squared,sigma_4_squared,sigma_5_squared, sigma_6_squared, sigma_7_squared,sigma_8_squared,sigma_9_squared,sigma_10_squared,sigma_11_squared)
-mcmc_trace(chains_sigmas, pars = c(sigma_1_squared, sigma_2_squared,sigma_3_squared,sigma_4_squared,sigma_5_squared, sigma_6_squared, sigma_7_squared,sigma_8_squared,sigma_9_squared,sigma_10_squared,sigma_11_squared), facet_args = list(ncol = 2, strip.position = "left"))
-a=mean(BETA_POST_5[,1])
-b=mean(BETA_POST_5[,2])
-c=mean(BETA_POST_5[,3]) 
-d=mean(BETA_POST_5[,4])
-e=mean(BETA_POST_5[,5])
-cbind(a,b,c,d,e)
-a=mean(upsilon_POST_5[,1])
-b=mean(upsilon_POST_5[,2])
-c=mean(upsilon_POST_5[,3]) 
-d=mean(upsilon_POST_5[,4])
-e=mean(upsilon_POST_5[,5])
-f=mean(upsilon_POST_5[,6])
-g=mean(upsilon_POST_5[,7])
-h=mean(upsilon_POST_5[,8]) 
-i=mean(upsilon_POST_5[,9])
-j=mean(upsilon_POST_5[,10])
-k=mean(upsilon_POST_5[,11])
-cbind(a,b,c,d,e,f,g,h,i,j,k)
-###########
-a=sd(BETA_POST_5[,1])
-b=sd(BETA_POST_5[,2])
-c=sd(BETA_POST_5[,3]) 
-d=sd(BETA_POST_5[,4])
-e=sd(BETA_POST_5[,5])
-cbind(a,b,c,d,e)
-a=sd(upsilon_POST_5[,1])
-b=sd(upsilon_POST_5[,2])
-c=sd(upsilon_POST_5[,3]) 
-d=sd(upsilon_POST_5[,4])
-e=sd(upsilon_POST_5[,5])
-f=sd(upsilon_POST_5[,6])
-g=sd(upsilon_POST_5[,7])
-h=sd(upsilon_POST_5[,8]) 
-i=sd(upsilon_POST_5[,9])
-j=sd(upsilon_POST_5[,10])
-k=sd(upsilon_POST_5[,11])
-cbind(a,b,c,d,e,f,g,h,i,j,k)
+
 ####To compute RMSE & MAE for beta and upsilon##CHAIN 1######
 posterior_means_beta_1=matrix(colMeans(BETA_POST_1),5,1)
 mse_beta_1=matrix(NA,5,1)
@@ -402,7 +318,6 @@ for(j in 1:m){
   mae_upsilon_3[j]=abs(posterior_means_upsilon_3[j,1]-upsilon[j,1])
 }
 MAE_upsilon_3=mean(mae_upsilon_3)
-################################
 ####To compute RMSE & MAE for beta and upsilon##CHAIN 4######
 posterior_means_beta_4=matrix(colMeans(BETA_POST_4),5,1)
 mse_beta_4=matrix(NA,5,1)
@@ -429,7 +344,6 @@ for(j in 1:m){
   mae_upsilon_4[j]=abs(posterior_means_upsilon_4[j,1]-upsilon[j,1])
 }
 MAE_upsilon_4=mean(mae_upsilon_4)
-###################################
 ####To compute RMSE & MAE for beta and upsilon##CHAIN 5######
 posterior_means_beta_5=matrix(colMeans(BETA_POST_5),5,1)
 mse_beta_5=matrix(NA,5,1)
@@ -443,7 +357,7 @@ for(j in 1:5){
   mae_beta_5[j]=abs(posterior_means_beta_5[j,1]-beta[j,])
 }
 MAE_beta_5=mean(mae_beta_5)
-############################for upsilon chain 5####
+####for upsilon chain 5####
 posterior_means_upsilon_5=matrix(colMeans(upsilon_POST_5),m,1)
 mse_upsilon_5=matrix(NA,m,1)
 for(j in 1:m){
@@ -456,72 +370,6 @@ for(j in 1:m){
   mae_upsilon_5[j]=abs(posterior_means_upsilon_5[j,1]-upsilon[j,1])
 }
 MAE_upsilon_5=mean(mae_upsilon_5)
-####################To compute RMSE & MAE######################
-posterior_means_z_1=colMeans(z_all_1)
-posterior_means_z_2=colMeans(z_all_2)
-posterior_means_z_3=colMeans(z_all_3)
-posterior_means_z_4=colMeans(z_all_4)
-posterior_means_z_5=colMeans(z_all_5)
-######CHAIN 1 ######
-mse_1=matrix(NA,n,1 )
-for(j in 1:n){
-  mse_1[j]=sum((posterior_means_z_1-latents[j,])^2)/m
-}
-MSE_1=sum(mse_1)/n
-RMSE_1=sqrt(MSE_1)
-mae_1=matrix(NA,n,1 )
-for(j in 1:n){
-  mae_1[j]=sum(abs(posterior_means_z_1-latents[j,]))/m
-}
-MAE_1=sum(mae_1)/n
-##########CHAIN 2#####
-mse_2=matrix(NA,n,1 )
-for(j in 1:n){
-  mse_2[j]=sum((posterior_means_z_2-latents[j,])^2)/m
-}
-MSE_2=sum(mse_2)/n
-RMSE_2=sqrt(MSE_2)
-mae_2=matrix(NA,n,1 )
-for(j in 1:n){
-  mae_2[j]=sum(abs(posterior_means_z_2-latents[j,]))/m
-}
-MAE_2=sum(mae_2)/n
-#######CHAIN 3 #####
-mse_3=matrix(NA,n,1 )
-for(j in 1:n){
-  mse_3[j]=sum((posterior_means_z_3-latents[j,])^2)/m
-}
-MSE_3=sum(mse_3)/n
-RMSE_3=sqrt(MSE_3)
-mae_3=matrix(NA,n,1 )
-for(j in 1:n){
-  mae_3[j]=sum(abs(posterior_means_z_3-latents[j,]))/m
-}
-MAE_3=sum(mae_3)/n
-#####CHAIN 4#######
-mse_4=matrix(NA,n,1 )
-for(j in 1:n){
-  mse_4[j]=sum((posterior_means_z_4-latents[j,])^2)/m
-}
-MSE_4=sum(mse_4)/n
-RMSE_4=sqrt(MSE_4)
-mae_4=matrix(NA,n,1 )
-for(j in 1:n){
-  mae_4[j]=sum(abs(posterior_means_z_4-latents[j,]))/m
-}
-MAE_4=sum(mae_4)/n
-####CHAIN 5 ########
-mse_5=matrix(NA,n,1 )
-for(j in 1:n){
-  mse_5[j]=sum((posterior_means_z_5-latents[j,])^2)/m
-}
-MSE_5=sum(mse_5)/n
-RMSE_5=sqrt(MSE_5)
-mae_5=matrix(NA,n,1 )
-for(j in 1:n){
-  mae_5[j]=sum(abs(posterior_means_z_5-latents[j,]))/m
-}
-MAE_5=sum(mae_5)/n
 ########## psrf_test/Gelman-rubin convergancy test ##########
 library(stableGR)
 library(coda)
@@ -536,11 +384,6 @@ PSRF_2_upsilon_test <- stable.GR(upsilon_POST_2)
 PSRF_3_upsilon_test <- stable.GR(upsilon_POST_3)
 PSRF_4_upsilon_test <- stable.GR(upsilon_POST_4)
 PSRF_5_upsilon_test <- stable.GR(upsilon_POST_5)
-PSRF_1_sigma_test <- stable.GR(sigmasq_upsilon_POST_1)
-PSRF_2_sigma_test <- stable.GR(sigmasq_upsilon_POST_2)
-PSRF_3_sigma_test <- stable.GR(sigmasq_upsilon_POST_3)
-PSRF_4_sigma_test <- stable.GR(sigmasq_upsilon_POST_4)
-PSRF_5_sigma_test <- stable.GR(sigmasq_upsilon_POST_5)
 ###95% Credible interval &coverage probability of beta chain 1
 Beta_mcmc_object_1 <- as.mcmc(BETA_POST_1)
 Beta_credible_interval_1 <- HPDinterval(Beta_mcmc_object_1 , prob = 0.95)
@@ -664,13 +507,9 @@ for (j in 1:m ){
   }
 }
 mean(coverage_prob_upsilon_5)
-
-
 #Checking the convergence with burn
-z_gibbis_burn<-z_all_4[seq(1, nrow(z_all_4[10001:4950000,]),100),]
 Beta_gibbis_burn<-BETA_POST_4[seq(1, nrow(BETA_POST_4[10001:50000,]),10),]
 upsilon_gibbis_burn<-upsilon_POST_4[seq(1, nrow(upsilon_POST_4[10001:50000,]),10),]
-sigma_gibbis_burn<- sigmasq_upsilon_POST_4[seq(1, nrow( sigmasq_upsilon_POST_4[10001:50000,]),10),]
 ####for Beta#####
 par(mfrow=c(5,1),mar=c(3,3,2,1))
 traceplot(as.mcmc(Beta_gibbis_burn[,1]), main=expression(paste(beta[1])))
@@ -702,7 +541,6 @@ sd(Beta_gibbis_burn[,2])
 sd(Beta_gibbis_burn[,3]) 
 sd(Beta_gibbis_burn[,4])
 sd(Beta_gibbis_burn[,5])
-
 coverage_probb <- mean(coverage_prob) 
 ###to compute coverage probability######
 latent_credible_interval <- HPDinterval(as.mcmc(z_all_1), prob = 0.95)
@@ -717,7 +555,6 @@ for (j in 1:99 ){
   }
 }
 coverage_probb <- mean(coverage_prob) 
-
 ######For upsilon####
 par(mfrow=c(6,1),mar=c(3,3,2,2))
 traceplot(as.mcmc(upsilon_gibbis_burn[,1]),main=expression(paste(upsilon[1])))
@@ -782,59 +619,6 @@ sd(upsilon_gibbis_burn[,8])
 sd(upsilon_gibbis_burn[,9])
 sd(upsilon_gibbis_burn[,10])
 sd(upsilon_gibbis_burn[,11])
-####for sigma ###
-par(mfrow=c(4,1),mar=c(3,3,2,2))
-traceplot(as.mcmc(sigma_gibbis_burn[,1]),main=expression(paste(sigma[1]^2)))
-traceplot(as.mcmc(sigma_gibbis_burn[,2]),main=expression(paste(sigma[2]^2)))
-traceplot(as.mcmc(sigma_gibbis_burn[,3]),main=expression(paste(sigma[3]^2)))
-traceplot(as.mcmc(sigma_gibbis_burn[,4]),main=expression(paste(sigma[4]^2)))
-par(mfrow=c(4,1),mar=c(3,3,2,2))
-traceplot(as.mcmc(sigma_gibbis_burn[,5]),main=expression(paste(sigma[5]^2)))
-traceplot(as.mcmc(sigma_gibbis_burn[,6]),main=expression(paste(sigma[6]^2)))
-traceplot(as.mcmc(sigma_gibbis_burn[,7]),main=expression(paste(sigma[7]^2)))
-traceplot(as.mcmc(sigma_gibbis_burn[,8]),main=expression(paste(sigma[8]^2)))
-par(mfrow=c(3,1),mar=c(3,3,2,2))
-traceplot(as.mcmc(sigma_gibbis_burn[,9]),main=expression(paste(sigma[9]^2)))
-traceplot(as.mcmc(sigma_gibbis_burn[,10]),main=expression(paste(sigma[10]^2)))
-traceplot(as.mcmc(sigma_gibbis_burn[,11]),main=expression(paste(sigma[11]^2)))
-par(mfrow=c(3,2),mar=c(7,3,2,2))
-densplot(as.mcmc(sigma_gibbis_burn[,1]), main=expression(paste(sigma[1]^2)))
-densplot(as.mcmc(sigma_gibbis_burn[,2]),main=expression(paste(sigma[2]^2)))
-densplot(as.mcmc(sigma_gibbis_burn[,3]),main=expression(paste(sigma[3]^2)))
-densplot(as.mcmc(sigma_gibbis_burn[,4]), main=expression(paste(sigma[4]^2)))
-densplot(as.mcmc(sigma_gibbis_burn[,5]), main=expression(paste(sigma[5]^2)))
-densplot(as.mcmc(sigma_gibbis_burn[,6]),main=expression(paste(sigma[6]^2)))
-par(mfrow=c(3,2),mar=c(7,3,2,2))
-densplot(as.mcmc(sigma_gibbis_burn[,7]),main=expression(paste(sigma[7]^2)))
-densplot(as.mcmc(sigma_gibbis_burn[,8]), main=expression(paste(sigma[8]^2)))
-densplot(as.mcmc(sigma_gibbis_burn[,9]), main=expression(paste(sigma[9]^2)))
-densplot(as.mcmc(sigma_gibbis_burn[,10]),main=expression(paste(sigma[10]^2)))
-densplot(as.mcmc(sigma_gibbis_burn[,11]),main=expression(paste(sigma[11]^2)))
-par(mfrow=c(3,2),mar=c(7,4,3,1))
-acf(as.mcmc(sigma_gibbis_burn[,1]),ylab="Autocorrelation",ci=F,lag.max=4000, main=expression(paste(sigma[1]^2)))
-acf(as.mcmc(sigma_gibbis_burn[,2]),ylab="Autocorrelation",ci=F,lag.max=4000,main=expression(paste(sigma[2]^2)))
-acf(as.mcmc(sigma_gibbis_burn[,3]),ylab="Autocorrelation",ci=F,lag.max=4000,main=expression(paste(sigma[3]^2)))
-acf(as.mcmc(sigma_gibbis_burn[,4]),ylab="Autocorrelation",ci=F,lag.max=4000,main=expression(paste(sigma[4]^2)))
-acf(as.mcmc(sigma_gibbis_burn[,5]),ylab="Autocorrelation",ci=F,lag.max=4000, main=expression(paste(sigma[5]^2)))
-acf(as.mcmc(sigma_gibbis_burn[,6]),ylab="Autocorrelation",ci=F,lag.max=4000,main=expression(paste(sigma[6]^2)))
-par(mfrow=c(3,2),mar=c(7,4,3,1))
-acf(as.mcmc(sigma_gibbis_burn[,7]),ylab="Autocorrelation",ci=F,lag.max=4000,main=expression(paste(sigma[7]^2)))
-acf(as.mcmc(sigma_gibbis_burn[,8]),ylab="Autocorrelation",ci=F,lag.max=4000,main=expression(paste(sigma[8]^2)))
-acf(as.mcmc(sigma_gibbis_burn[,9]),ylab="Autocorrelation",ci=F,lag.max=4000, main=expression(paste(sigma[9]^2)))
-acf(as.mcmc(sigma_gibbis_burn[,10]),ylab="Autocorrelation",ci=F,lag.max=4000,main=expression(paste(sigma[10]^2)))
-acf(as.mcmc(sigma_gibbis_burn[,11]),ylab="Autocorrelation",ci=F,lag.max=4000,main=expression(paste(sigma[11]^2)))
-#Posterior means of sigma
-mean(sigma_gibbis_burn[,1])
-mean(sigma_gibbis_burn[,2])
-mean(sigma_gibbis_burn[,3])
-mean(sigma_gibbis_burn[,4])
-mean(sigma_gibbis_burn[,5])
-mean(sigma_gibbis_burn[,6])
-mean(sigma_gibbis_burn[,7])
-mean(sigma_gibbis_burn[,8])
-mean(sigma_gibbis_burn[,9])
-mean(sigma_gibbis_burn[,10])
-mean(sigma_gibbis_burn[,11])
 #Variation between the groups
 library(reshape2)
 library(viridis)
@@ -868,9 +652,8 @@ for(i in 1:1){
                                    1)
   }
 }
-
+###To chech posterior predictive
 Y_init=latent_cat
-
 posterior_meansz1=matrix(NA,1,m)
 posterior_meansz1=t(colMeans(z_pred_outsample_1,dims=1))
 #print(posterior_means_z1)
@@ -889,8 +672,6 @@ plot(d1$x, d1$y, pch = 16, col = "blue",xlab="",ylab="",cex=2,main="Predictions 
 par(new = TRUE)                             # Add new plot
 plot(d2$x, d2$y, pch = 17, col = "green",cex=2,              # Create second plot without axes
      axes = FALSE, xlab = "Groups", ylab = "Observed variable Y")
-axis(side = 4, at = pretty(range(d2$y)))      # Add second axis
-mtext("Latent variable z", side = 4, line = 3)             # Add second axis label
 ##################################################################
 ###########Estimates for the classical Model###################
 mydata=read.csv('C:\\Users\\user\\Desktop\\data.csv')
@@ -927,7 +708,6 @@ for(i in 1:4000){
   }
 }
 mae1=mean(mae)
-
 p=posterior_summary(fit2)
 ######Covarage probability of the classical model 
 point_estimates=matrix(point_estimates,5,1)
@@ -942,3 +722,361 @@ for (j in 1:5 ){
   }
 }
 mean(coverage_prob)
+####R Code for real-data##########################################################################################
+####################################################################################################
+library("LaplacesDemon")
+set.seed(12345)
+data=read.csv('D:\\Myfiles\\Mythesisresearch\\birthweight.csv')
+attach(data)
+X_tig=as.matrix(subset(data[,2:6], Regions==1))
+X_afa=as.matrix(subset(data[,2:6], Regions==2))
+X_amh=as.matrix(subset(data[,2:6], Regions==3))
+X_oro=as.matrix(subset(data[,2:6], Regions==4))
+X_som=as.matrix(subset(data[,2:6], Regions==5))
+X_ben=as.matrix(subset(data[,2:6], Regions==6))
+X_snn=as.matrix(subset(data[,2:6], Regions==7))
+X_gam=as.matrix(subset(data[,2:6], Regions==8))
+X_har=as.matrix(subset(data[,2:6], Regions==9))
+X_add=as.matrix(subset(data[,2:6], Regions==10))
+X_dir=as.matrix(subset(data[,2:6], Regions==11))
+#I need to rescale the covariates
+X_tig=scale(X_tig,center=TRUE,scale=TRUE)
+X_afa=scale(X_afa,center=TRUE,scale=TRUE)
+X_amh=scale(X_amh,center=TRUE,scale=TRUE)
+X_oro=scale(X_oro,center=TRUE,scale=TRUE)
+X_som=scale(X_som,center=TRUE,scale=TRUE)
+X_ben=scale(X_ben,center=TRUE,scale=TRUE)
+X_snn=scale(X_snn,center=TRUE,scale=TRUE)
+X_gam=scale(X_gam,center=TRUE,scale=TRUE)
+X_har=scale(X_har,center=TRUE,scale=TRUE)
+X_add=scale(X_add,center=TRUE,scale=TRUE)
+X_dir=scale(X_dir,center=TRUE,scale=TRUE)
+rownames(X_tig) <- 1:nrow(X_tig)
+rownames(X_afa) <- 1:nrow(X_afa)
+rownames(X_amh) <- 1:nrow(X_amh)
+rownames(X_oro) <- 1:nrow(X_oro)
+rownames(X_som) <- 1:nrow(X_som)
+rownames(X_ben) <- 1:nrow(X_ben)
+rownames(X_snn) <- 1:nrow(X_snn)
+rownames(X_gam) <- 1:nrow(X_gam)
+rownames(X_har) <- 1:nrow(X_har)
+rownames(X_add) <- 1:nrow(X_add)
+rownames(X_dir) <- 1:nrow(X_dir)
+set.seed(12345)
+X=list(X_tig,X_afa,X_amh,X_oro,X_som,X_ben,X_snn,X_gam,X_har,X_add,X_dir)
+y_tig=matrix(subset(data[,1], Regions==1),nrow(X_tig),1)
+y_afa=matrix(subset(data[,1], Regions==2),nrow(X_afa),1)
+y_amh=matrix(subset(data[,1], Regions==3),nrow(X_amh),1)
+y_oro=matrix(subset(data[,1], Regions==4),nrow(X_oro),1)
+y_som=matrix(subset(data[,1], Regions==5),nrow(X_som),1)
+y_ben=matrix(subset(data[,1], Regions==6),nrow(X_ben),1)
+y_snn=matrix(subset(data[,1], Regions==7),nrow(X_snn),1)
+y_gam=matrix(subset(data[,1], Regions==8),nrow(X_gam),1)
+y_har=matrix(subset(data[,1], Regions==9),nrow(X_har),1)
+y_add=matrix(subset(data[,1], Regions==10),nrow(X_add),1)
+y_dir=matrix(subset(data[,1], Regions==11),nrow(X_dir),1)
+Y=list(y_tig,y_afa,y_amh,y_oro,y_som,y_ben,y_snn,y_gam,y_har,y_add,y_dir)
+#Iinitial values for z
+z_tig=matrix(rep(5,nrow(X_tig)),nrow(X_tig),1)
+z_afa=matrix(rep(5,nrow(X_afa)),nrow(X_afa),1)
+z_amh=matrix(rep(5,nrow(X_amh)),nrow(X_amh),1)
+z_oro=matrix(rep(5,nrow(X_oro)),nrow(X_oro),1)
+z_som=matrix(rep(5,nrow(X_som)),nrow(X_som),1)
+z_ben=matrix(rep(5,nrow(X_ben)),nrow(X_ben),1)
+z_snn=matrix(rep(5,nrow(X_snn)),nrow(X_snn),1)
+z_gam=matrix(rep(5,nrow(X_gam)),nrow(X_gam),1)
+z_har=matrix(rep(5,nrow(X_har)),nrow(X_har),1)
+z_add=matrix(rep(5,nrow(X_add)),nrow(X_add),1)
+z_dir=matrix(rep(5,nrow(X_dir)),nrow(X_dir),1)
+z=list(z_tig,z_afa,z_amh,z_oro,z_som,z_ben,z_snn,z_gam,z_har,z_add,z_dir)
+m=11
+n_obs=matrix(c(length(z_tig),length(z_afa),length(z_amh),length(z_oro),length(z_som),length(z_ben),length(z_snn),length(z_gam),length(z_har),length(z_add),length(z_dir)),m,1)
+#prior hyperparameters
+lamda2_prior=0.3
+#prior degrees of belief to update sigma square of upsilon (latent traits) 
+omega_upsilon_prior=19
+#Initial values for BETA
+beta=matrix(c(-1.2,-0.9, -0.8,-0.9, 1))
+BETA=matrix(NA,ncol(X_tig),1)
+#I need this package for scaled inverse chi-squared
+library("geoR")
+library("mvtnorm")
+library(MCMCpack)
+p=ncol(X[[1]])
+omega_upsilon_posterior=NULL #posterior degrees of freedom of variance of latent trait
+lamda2_posterior=NULL #posterior scale parameter of sigma of variance of random latent trait
+mean_upsilon_posterior=var_upsilon_posterior=NULL#post values of mean and
+#variance of latent trait
+n_iter=30000
+library("msm")
+
+BETA_POST=upsilon_POST=sigmasq_upsilon_POST=NULL
+upsilon_posterior=rep(0.1,m)
+sigmasq_upsilon_post=NULL#posterior value of sigmasq of upsilon
+z_all=NULL
+#GIBBS SAMPLER
+for(i in 1:n_iter){
+  for(j in 1:m){
+    omega_upsilon_posterior[j]=(omega_upsilon_prior+1) #updating degrees of freedom of variance of latent trait
+    
+    lamda2_posterior[j]=(lamda2_prior+
+                           ((upsilon_posterior[j])^2)/omega_upsilon_posterior[j]) #update scale parameter of variance of latent trait
+    
+    sigmasq_upsilon_post[j]=rinvchisq(1,omega_upsilon_posterior[j],
+                                      lamda2_posterior[j]) #variance of latent trait
+    
+    
+  } 
+  
+  #given variance I can sample from upsilon (latent traits)
+  mean_upsilon_posterior=list()
+  mean_upsilon_posterior[[1]]=matrix(NA,length(z_tig),1)
+  mean_upsilon_posterior[[2]]=matrix(NA,length(z_afa),1)
+  mean_upsilon_posterior[[3]]=matrix(NA,length(z_amh),1)
+  mean_upsilon_posterior[[4]]=matrix(NA,length(z_oro),1)
+  mean_upsilon_posterior[[5]]=matrix(NA,length(z_som),1)
+  mean_upsilon_posterior[[6]]=matrix(NA,length(z_ben),1)
+  mean_upsilon_posterior[[7]]=matrix(NA,length(z_snn),1)
+  mean_upsilon_posterior[[8]]=matrix(NA,length(z_gam),1)
+  mean_upsilon_posterior[[9]]=matrix(NA,length(z_har),1)
+  mean_upsilon_posterior[[10]]=matrix(NA,length(z_add),1)
+  mean_upsilon_posterior[[11]]=matrix(NA,length(z_dir),1)
+  for(t in 1:length(z_tig)){
+      mean_upsilon_posterior[[1]][t,]=(z[[1]][t,]-X[[1]][t,]%*%beta)
+  }
+  for(t in 1:length(z_afa)){
+    mean_upsilon_posterior[[2]][t,]=(z[[2]][t,]-X[[2]][t,]%*%beta)
+  }
+  for(t in 1:length(z_amh)){
+    mean_upsilon_posterior[[3]][t,]=(z[[3]][t,]-X[[3]][t,]%*%beta)
+  }
+  for(t in 1:length(z_oro)){
+    mean_upsilon_posterior[[4]][t,]=(z[[4]][t,]-X[[4]][t,]%*%beta)
+  }
+  for(t in 1:length(z_som)){
+    mean_upsilon_posterior[[5]][t,]=(z[[5]][t,]-X[[5]][t,]%*%beta)
+  }
+  for(t in 1:length(z_ben)){
+    mean_upsilon_posterior[[6]][t,]=(z[[6]][t,]-X[[6]][t,]%*%beta)
+  }
+  for(t in 1:length(z_snn)){
+    mean_upsilon_posterior[[7]][t,]=(z[[7]][t,]-X[[7]][t,]%*%beta)
+  }
+  for(t in 1:length(z_gam)){
+    mean_upsilon_posterior[[8]][t,]=(z[[8]][t,]-X[[8]][t,]%*%beta)
+  }
+  for(t in 1:length(z_har)){
+    mean_upsilon_posterior[[9]][t,]=(z[[9]][t,]-X[[9]][t,]%*%beta)
+  }
+  for(t in 1:length(z_add)){
+    mean_upsilon_posterior[[10]][t,]=(z[[10]][t,]-X[[10]][t,]%*%beta)
+  }
+  for(t in 1:length(z_dir)){
+    mean_upsilon_posterior[[11]][t,]=(z[[11]][t,]-X[[11]][t,]%*%beta)
+  }
+  ###########################
+  
+  
+  for(j in 1:m){
+    var_upsilon_posterior[j]=1/(n_obs[j,]+(1/sigmasq_upsilon_post[j]))
+  }
+  #summing over time:
+  mean_upsilon_posterior_sum=c()
+  for (matrix in mean_upsilon_posterior) {
+    matrix_sum =sum(matrix)
+    mean_upsilon_posterior_sum =c(mean_upsilon_posterior_sum, matrix_sum)
+  }
+  #updating latent traits
+  for(j in 1:m){
+    mean_upsilon_posterior_sum[j]=mean_upsilon_posterior_sum[j]/(n_obs[j,]+1/sigmasq_upsilon_post[j])
+    upsilon_posterior[j]=rnorm(1,mean_upsilon_posterior_sum[j],
+                             sqrt(var_upsilon_posterior[j]))
+  }
+  #As I have only one latent trait upsilon for each region
+  upsilon_rep=list()
+  for(j in 1:m){
+    upsilon_rep[[j]]=rep(upsilon_posterior[j],n_obs[j,])
+  }
+  ###to convert the list into matrix 
+  upsilon_rep=lapply(upsilon_rep, function(x) matrix(x, nrow = length(x), ncol = 1))
+  a=b=list()
+  a[[1]]=matrix(NA,length(z_tig),1)
+  a[[2]]=matrix(NA,length(z_afa),1)
+  a[[3]]=matrix(NA,length(z_amh),1)
+  a[[4]]=matrix(NA,length(z_oro),1)
+  a[[5]]=matrix(NA,length(z_som),1)
+  a[[6]]=matrix(NA,length(z_ben),1)
+  a[[7]]=matrix(NA,length(z_snn),1)
+  a[[8]]=matrix(NA,length(z_gam),1)
+  a[[9]]=matrix(NA,length(z_har),1)
+  a[[10]]=matrix(NA,length(z_add),1)
+  a[[11]]=matrix(NA,length(z_dir),1)
+  b[[1]]=matrix(NA,length(z_tig),1)
+  b[[2]]=matrix(NA,length(z_afa),1)
+  b[[3]]=matrix(NA,length(z_amh),1)
+  b[[4]]=matrix(NA,length(z_oro),1)
+  b[[5]]=matrix(NA,length(z_som),1)
+  b[[6]]=matrix(NA,length(z_ben),1)
+  b[[7]]=matrix(NA,length(z_snn),1)
+  b[[8]]=matrix(NA,length(z_gam),1)
+  b[[9]]=matrix(NA,length(z_har),1)
+  b[[10]]=matrix(NA,length(z_add),1)
+  b[[11]]=matrix(NA,length(z_dir),1)
+  for(t in 1:length(z_tig)){
+    zt=z[[1]]
+    a[[1]][t,]=max(zt[Y[[1]][,1]<Y[[1]][t,]])
+    b[[1]][t,]=min(zt[Y[[1]][t,]<Y[[1]][,1]])
+    z[[1]][t,]=rtnorm(1,X[[1]][t,]%*%beta+upsilon_rep[[1]][t,],1,a[[1]][t,],b[[1]][t,])
+  }
+  for(t in 1:length(z_afa)){
+    zt=z[[2]]
+    a[[2]][t,]=max(zt[Y[[2]][,1]<Y[[2]][t,]])
+    b[[2]][t,]=min(zt[Y[[2]][t,]<Y[[2]][,1]])
+    z[[2]][t,]=rtnorm(1,X[[2]][t,]%*%beta+upsilon_rep[[2]][t,],1,a[[2]][t,],b[[2]][t,])
+  }
+  for(t in 1:length(z_amh)){
+    zt=z[[3]]
+    a[[3]][t,]=max(zt[Y[[3]][,1]<Y[[3]][t,]])
+    b[[3]][t,]=min(zt[Y[[3]][t,]<Y[[3]][,1]])
+    z[[3]][t,]=rtnorm(1,X[[3]][t,]%*%beta+upsilon_rep[[3]][t,],1,a[[3]][t,],b[[3]][t,])
+  }
+  for(t in 1:length(z_oro)){
+    zt=z[[4]]
+    a[[4]][t,]=max(zt[Y[[4]][,1]<Y[[4]][t,]])
+    b[[4]][t,]=min(zt[Y[[4]][t,]<Y[[4]][,1]])
+    z[[4]][t,]=rtnorm(1,X[[4]][t,]%*%beta+upsilon_rep[[4]][t,],1,a[[4]][t,],b[[4]][t,])
+  } 
+  for(t in 1:length(z_som)){
+    zt=z[[5]]
+    a[[5]][t,]=max(zt[Y[[5]][,1]<Y[[5]][t,]])
+    b[[5]][t,]=min(zt[Y[[5]][t,]<Y[[5]][,1]])
+    z[[5]][t,]=rtnorm(1,X[[5]][t,]%*%beta+upsilon_rep[[5]][t,],1,a[[5]][t,],b[[5]][t,])
+  }
+  for(t in 1:length(z_ben)){
+    zt=z[[6]]
+    a[[6]][t,]=max(zt[Y[[6]][,1]<Y[[6]][t,]])
+    b[[6]][t,]=min(zt[Y[[6]][t,]<Y[[6]][,1]])
+    z[[6]][t,]=rtnorm(1,X[[6]][t,]%*%beta+upsilon_rep[[6]][t,],1,a[[6]][t,],b[[6]][t,])
+  }
+  for(t in 1:length(z_snn)){
+    zt=z[[7]]
+    a[[7]][t,]=max(zt[Y[[7]][,1]<Y[[7]][t,]])
+    b[[7]][t,]=min(zt[Y[[7]][t,]<Y[[7]][,1]])
+    z[[7]][t,]=rtnorm(1,X[[7]][t,]%*%beta+upsilon_rep[[7]][t,],1,a[[7]][t,],b[[7]][t,])
+  }
+  for(t in 1:length(z_gam)){
+    zt=z[[8]]
+    a[[8]][t,]=max(zt[Y[[8]][,1]<Y[[8]][t,]])
+    b[[8]][t,]=min(zt[Y[[8]][t,]<Y[[8]][,1]])
+    z[[8]][t,]=rtnorm(1,X[[8]][t,]%*%beta+upsilon_rep[[8]][t,],1,a[[8]][t,],b[[8]][t,])
+  }
+  for(t in 1:length(z_har)){
+    zt=z[[9]]
+    a[[9]][t,]=max(zt[Y[[9]][,1]<Y[[9]][t,]])
+    b[[9]][t,]=min(zt[Y[[9]][t,]<Y[[9]][,1]])
+    z[[9]][t,]=rtnorm(1,X[[9]][t,]%*%beta+upsilon_rep[[9]][t,],1,a[[9]][t,],b[[9]][t,])
+    
+  }
+  for(t in 1:length(z_add)){
+    zt=z[[10]]
+    a[[10]][t,]=max(zt[Y[[10]][,1]<Y[[10]][t,]])
+    b[[10]][t,]=min(zt[Y[[10]][t,]<Y[[10]][,1]])
+    z[[10]][t,]=rtnorm(1,X[[10]][t,]%*%beta+upsilon_rep[[10]][t,],1,a[[10]][t,],b[[10]][t,])
+  }
+  for(t in 1:length(z_dir)){
+    zt=z[[11]]
+    a[[11]][t,]=max(zt[Y[[11]][,1]<Y[[11]][t,]])
+    b[[11]][t,]=min(zt[Y[[11]][t,]<Y[[11]][,1]])
+    z[[11]][t,]=rtnorm(1,X[[11]][t,]%*%beta+upsilon_rep[[11]][t,],1,a[[11]][t,],b[[11]][t,])
+  }
+  muj1=array(NA,c(p,p,m))
+  muj1_sum=matrix(NA,p,p)
+  muj2=array(NA,c(p,1,m))
+  muj2_sum=matrix(NA,p,1)
+  muj_final=matrix(NA,p,1)
+  varj_final=matrix(NA,p,p)
+  for(j in 1:m){
+    muj1[,,j]=t(X[[j]])%*%X[[j]]
+    #before summing over j
+    muj1_sum=apply(muj1,c(1:2),sum)#summing over j
+    muj2[,,j]=t(X[[j]])%*%(z[[j]]-upsilon_rep[[j]])
+    muj2_sum=apply(muj2,c(1:2),sum)#summing over j
+    muj_final=solve(muj1_sum)%*%(muj2_sum)
+    varj_final=solve(muj1_sum)
+  }
+  BETA=mvrnorm(n=1,mu=muj_final,
+               varj_final)#sampling from a multivariate Normal
+  #with updated mean and variance
+  
+  BETA_POST=rbind(BETA_POST,BETA)
+  upsilon_POST=rbind(upsilon_POST,upsilon_posterior)
+  sigmasq_upsilon_POST=rbind(sigmasq_upsilon_POST,sigmasq_upsilon_post)
+  
+  print(paste("iteration",i))
+  z_all=rbind(z_all,z)
+}
+library(coda)
+library(bayesplot)
+library(stableGR)
+Beta_gibbis_burn<-BETA_POST[seq(1, nrow(BETA_POST[5001:30000,]),5),]
+upsilon_gibbis_burn<-upsilon_POST[seq(1, nrow(upsilon_POST[5001:30000,]),5),]
+mean(Beta_gibbis_burn[,1])
+mean(Beta_gibbis_burn[,2])
+mean(Beta_gibbis_burn[,3])
+mean(Beta_gibbis_burn[,4])
+mean(Beta_gibbis_burn[,5])
+sd(Beta_gibbis_burn[,1])
+sd(Beta_gibbis_burn[,2])
+sd(Beta_gibbis_burn[,3])
+sd(Beta_gibbis_burn[,4])
+sd(Beta_gibbis_burn[,5])
+Beta_mcmc_object=as.mcmc(Beta_gibbis_burn)
+Beta_credible_interval=HPDinterval(Beta_mcmc_object , prob = 0.95)
+PSRF_beta_test=stable.GR(Beta_gibbis_burn)
+#Posterior means of upsilon
+mean(upsilon_gibbis_burn[,1])
+mean(upsilon_gibbis_burn[,2])
+mean(upsilon_gibbis_burn[,3])
+mean(upsilon_gibbis_burn[,4])
+mean(upsilon_gibbis_burn[,5])
+mean(upsilon_gibbis_burn[,6])
+mean(upsilon_gibbis_burn[,7])
+mean(upsilon_gibbis_burn[,8])
+mean(upsilon_gibbis_burn[,9])
+mean(upsilon_gibbis_burn[,10])
+mean(upsilon_gibbis_burn[,11])
+#Posterior sd of upsilon
+sd(upsilon_gibbis_burn[,1])
+sd(upsilon_gibbis_burn[,2])
+sd(upsilon_gibbis_burn[,3])
+sd(upsilon_gibbis_burn[,4])
+sd(upsilon_gibbis_burn[,5])
+sd(upsilon_gibbis_burn[,6])
+sd(upsilon_gibbis_burn[,7])
+sd(upsilon_gibbis_burn[,8])
+sd(upsilon_gibbis_burn[,9])
+sd(upsilon_gibbis_burn[,10])
+sd(upsilon_gibbis_burn[,11])
+upsilon_mcmc_object=as.mcmc(upsilon_gibbis_burnn)
+upsilon_credible_interval=HPDinterval(upsilon_mcmc_object , prob = 0.95)
+PSRF_upsilon_test=stable.GR(upsilon_gibbis_burn)
+#####Regional variation 
+library(reshape2)
+library(viridis)
+library(ggplot2)
+new_colnames <- c("1","2","3","4","5","6","7","8","9","10","11")
+colnames(g) <- new_colnames
+g=data.frame(sigma_gibbis_burn)
+data <- var(g[sapply(g,is.numeric)])
+data1 <- melt(data)
+data2=read.csv(('D:\\Myfiles\\Mythesisresearch\\Variation.csv'))
+data2=data.frame(data2)
+colnames(data2)=c("Var1","Var2", "Variations")
+x_labels <- c("Tigray", "Afar", "Amhara", "Oromia", "Somale", "Benishangul", "SNN", "Gambela", "Harari", "Addis Abeba", "Dire Dawa")
+y_labels <- c("Tigray", "Afar", "Amhara", "Oromia", "Somale", "Benishangul", "SNN", "Gambela", "Harari", "Addis Abeba", "Dire Dawa")
+ggplot(data2, aes(x = Var1, y = Var2, fill = Variations)) +
+  geom_tile() +scale_fill_viridis(discrete = FALSE)+geom_tile()+
+  labs(title = "",
+       x = "Regions",
+       y = "Regions")+scale_x_discrete(labels = x_labels)+
+  scale_y_discrete(labels = y_labels)
