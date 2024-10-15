@@ -1,7 +1,7 @@
 # R-code used for "On Latent Trait Model with Bayesian Marginal Likelihood of Rank-Based Estimation"
 library("LaplacesDemon")
 set.seed(12345)
-n=100#sample size
+n=300#sample size
 groups=11
 epsilon=matrix(NA,n,1)
 #Create a sample of "time" observations on the independent variables x
@@ -110,9 +110,9 @@ X_init=array(cbind(X_1,X_2,
                    X_3,X_4,
                    X_5,X_6,X_7,X_8,X_9,X_10,X_11),c((n_obs+1),ncol(X_1),m))
 #prior hyperparameters
-lamda2_prior=0.2
+lamda2_prior=2
 #prior degrees of belief to update sigma square of upsilon (random effects) 
-omega_upsilon_prior=17
+omega_upsilon_prior=15
 #Initial values for BETA
 BETA=matrix(0,ncol(X_1),1)
 #Initial values for z
