@@ -510,6 +510,183 @@ mean(coverage_prob_upsilon_5)
 #Checking the convergence with burn
 Beta_gibbis_burn<-BETA_POST_4[seq(1, nrow(BETA_POST_4[10001:50000,]),10),]
 upsilon_gibbis_burn<-upsilon_POST_4[seq(1, nrow(upsilon_POST_4[10001:50000,]),10),]
+##############To compute batch mean and SE####
+library(coda)
+library(ggplot2)
+# Custom function to calculate batch means for each parameter in an MCMC matrix
+calculate_batch_means_matrix <- function(samples_matrix, batch_size) {
+  n <- nrow(samples_matrix)
+  n_batches <- floor(n / batch_size)
+  # Trim samples to fit batch size
+  samples_matrix <- samples_matrix[1:(n_batches * batch_size), ]
+  
+  # Reshape matrix into 3D array: (batch_size, n_batches, n_parameters)
+  reshaped_samples <- array(samples_matrix, dim = c(batch_size, n_batches, ncol(samples_matrix)))
+  
+  # Calculate batch means across batches for each parameter
+  batch_means <- apply(reshaped_samples, 2, colMeans)
+  
+  return(batch_means)
+}
+
+set.seed(123)
+
+batch_sizes <- c(100, 500, 1000, 1500, 2000)
+
+# Data frame to store means and standard errors for each batch size and each parameter
+results <- data.frame(batch_size = integer(), parameter = character(), 
+                      batch_mean = numeric(), standard_error = numeric())
+
+# Loop over batch sizes and calculate means and standard errors
+for (batch_size in batch_sizes) {
+  # Calculate batch means for each parameter at this batch size
+  batch_means <- calculate_batch_means_matrix(Beta_gibbis_burn, batch_size)
+  
+  # Calculate standard errors for each parameter based on batch means
+  standard_errors <- apply(batch_means, 1, function(x) sd(x) / sqrt(length(x)))
+  
+  # Store results in data frame
+  for (i in seq_along(standard_errors)) {
+    results <- rbind(results, data.frame(
+      batch_size = batch_size,
+      parameter = paste0("\u03B2", i),
+      batch_mean = mean(batch_means[i, ]),
+      standard_error = standard_errors[i]
+    ))
+  }
+}
+
+# Display results
+mydata2=(results)
+##################################################
+library(ggplot2)
+library(cowplot)
+
+# Plot 1: Standard error vs. batch size
+plot1 <- ggplot(mydata2, aes(x = batch_size, y = standard_error, color = Parameters)) +
+  geom_line() +                 
+  geom_point() +                
+  labs(
+    x = "Sample size",
+    y = "Batch standard error"
+  ) +
+  theme_minimal() +  
+  theme(panel.background = element_rect(fill = "grey"), legend.position = "none") + # Remove legend here
+  scale_x_continuous(breaks = batch_sizes)
+
+# Plot 2: Batch mean vs. batch size
+plot2 <- ggplot(results, aes(x = batch_size, y = batch_mean, color = Parameters)) +
+  geom_line() +                 
+  geom_point() +                
+  labs(
+    x = "Sample size",
+    y = "Batch mean"
+  ) +
+  theme_minimal() +              
+  theme(panel.background = element_rect(fill = "grey"), legend.position = "none") + # Remove legend here
+  scale_x_continuous(breaks = batch_sizes)
+
+# Extract the legend from one of the plots
+legend <- get_legend(
+  ggplot(results, aes(x = batch_size, y = batch_mean, color = Parameters)) +
+    geom_line() +
+    theme_minimal() +
+    theme(legend.position = "right")  # Adjust legend position if needed
+)
+
+# Combine plots and legend
+combined_plot <- plot_grid(plot1, plot2, legend, ncol = 3, rel_widths = c(1, 1, 0.2))
+
+# Display the combined plot with a common legend
+print(combined_plot)
+####################################################################for upsilon########
+calculate_batch_means_matrix <- function(samples_matrix, batch_size) {
+  n <- nrow(samples_matrix)
+  n_batches <- floor(n / batch_size)
+  # Trim samples to fit batch size
+  samples_matrix <- samples_matrix[1:(n_batches * batch_size), ]
+  
+  # Reshape matrix into 3D array: (batch_size, n_batches, n_parameters)
+  reshaped_samples <- array(samples_matrix, dim = c(batch_size, n_batches, ncol(samples_matrix)))
+  
+  # Calculate batch means across batches for each parameter
+  batch_means <- apply(reshaped_samples, 2, colMeans)
+  
+  return(batch_means)
+}
+
+# Example MCMC samples in matrix form (10000 samples, 3 parameters)
+set.seed(123)
+
+# Different batch sizes to test
+batch_sizes <- c(100, 500, 1000, 1500, 2000)
+
+# Data frame to store means and standard errors for each batch size and each parameter
+results <- data.frame(batch_size = integer(), parameter = character(), 
+                      batch_mean = numeric(), standard_error = numeric())
+
+# Loop over batch sizes and calculate means and standard errors
+for (batch_size in batch_sizes) {
+  # Calculate batch means for each parameter at this batch size
+  batch_means <- calculate_batch_means_matrix(upsilon_gibbis_burn, batch_size)
+  
+  # Calculate standard errors for each parameter based on batch means
+  standard_errors <- apply(batch_means, 1, function(x) sd(x) / sqrt(length(x)))
+  
+  # Store results in data frame
+  for (i in seq_along(standard_errors)) {
+    results <- rbind(results, data.frame(
+      batch_size = batch_size,
+      parameter = paste0("\u03C5", i),
+      batch_mean = mean(batch_means[i, ]),
+      standard_error = standard_errors[i]
+    ))
+  }
+}
+upsilondata2=(results)
+######################
+upsilondata2$Parameters <- factor(upsilondata2$Parameters, levels = paste0("υ", 1:11))
+
+# Define batch sizes for axis breaks
+batch_sizes <- unique(upsilondata2$batch_size)
+# Plot 1: Standard error vs. batch size
+plot1 <- ggplot(upsilondata2, aes(x = batch_size, y = standard_error, color = Parameters)) +
+  geom_line() +                 
+  geom_point() +                
+  labs(
+    x = "Sample size",
+    y = "Batch standard error"
+  ) +
+  theme_minimal() +  
+  theme(panel.background = element_rect(fill = "grey"), legend.position = "none") + # Remove legend here
+  scale_x_continuous(breaks = batch_sizes)
+
+# Plot 2: Batch mean vs. batch size
+plot2 <- ggplot(upsilondata2, aes(x = batch_size, y = batch_mean, color = Parameters)) +
+  geom_line() +                 
+  geom_point() +                
+  labs(
+    x = "Sample size",
+    y = "Batch mean"
+  ) +
+  theme_minimal() +              
+  theme(panel.background = element_rect(fill = "grey"), legend.position = "none") + # Remove legend here
+  scale_x_continuous(breaks = batch_sizes)
+
+# Extract the legend from one of the plots
+legend <- get_legend(
+  ggplot(upsilondata2, aes(x = batch_size, y = batch_mean, color = Parameters)) +
+    geom_line() +
+    theme_minimal() +
+    theme(legend.position = "right")  # Adjust legend position if needed
+)
+
+# Combine plots and legend
+combined_plot <- plot_grid(plot1, plot2, legend, ncol = 3, rel_widths = c(1, 1, 0.2))
+
+# Display the combined plot with a common legend
+print(combined_plot)
+#####################
 ####for Beta#####
 par(mfrow=c(5,1),mar=c(3,3,2,1))
 traceplot(as.mcmc(Beta_gibbis_burn[,1]), main=expression(paste(beta[1])))
