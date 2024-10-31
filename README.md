@@ -851,8 +851,7 @@ plot(d1$x, d1$y, pch = 16, col = "blue",xlab="",ylab="",cex=2,main="Predictions 
 par(new = TRUE)                             # Add new plot
 plot(d2$x, d2$y, pch = 17, col = "green",cex=2,              # Create second plot without axes
      axes = FALSE, xlab = "Groups", ylab = "Observed variable Y")
-##################################################################
-###########Estimates for the classical Model###################
+# Estimates for the classical Model
 mydata=read.csv('C:\\Users\\user\\Desktop\\data.csv')
 View(mydata)
 attach(mydata)
@@ -901,7 +900,7 @@ for (j in 1:5 ){
   }
 }
 mean(coverage_prob)
-#### R Code for real-data##########################################################################################
+#### R Code for real-data
 library("LaplacesDemon")
 set.seed(12345)
 data=read.csv('D:\\Myfiles\\Mythesisresearch\\birthweight.csv')
