@@ -1,4 +1,6 @@
 # R-code used for "On Latent Trait Model with Bayesian Marginal Likelihood of Rank-Based Estimation"
+
+# Code for Simulation study
 library("LaplacesDemon")
 set.seed(12345)
 n=300#sample size
@@ -899,8 +901,7 @@ for (j in 1:5 ){
   }
 }
 mean(coverage_prob)
-####R Code for real-data##########################################################################################
-####################################################################################################
+#### R Code for real-data##########################################################################################
 library("LaplacesDemon")
 set.seed(12345)
 data=read.csv('D:\\Myfiles\\Mythesisresearch\\birthweight.csv')
